@@ -4,7 +4,7 @@ function getRandomIntInclusive(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   } else {
-    console.log('Введены некорректные данные');
+    return ('Введены некорректные данные');
   }
 }
 
@@ -15,7 +15,7 @@ function getRandomArbitrary(min, max, digitAmount = 0) {
     const digitDegree = 10 ** digitAmount;
     return ~~ ((Math.random() * (max - min + 1) + min) * digitDegree) / digitDegree;
   } else {
-    console.log('Введены некорректные данные');
+    return ('Введены некорректные данные');
   }
 }
 
