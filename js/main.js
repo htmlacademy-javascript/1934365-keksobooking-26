@@ -6,10 +6,9 @@ const MAX_GUESTS_VALUE = 10;
 const MAX_ROOMS_VALUE = 6;
 const TITLES = ['Отель Платан', 'Авангард Отель', 'Бутик-отель Бристоль', 'Аэроотель', 'Хилтон Гарден Инн ', 'Отель Хэмингуэй', 'Гостиница Резидент', 'Римар Отель', 'Forum Plaza', 'Golden Tulip'];
 const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
-
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-
 const PHOTOS = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
+const SIMILAR_ADS_COUNT = 10;
 
 const getRandomPositiveInteger = function (a, b) {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
@@ -112,14 +111,7 @@ const createAd = function () {
 
 createAd();
 
-const createAds = function () {
-  const ads = [];
+// eslint-disable-next-line no-unused-vars
+const ads = Array.from({length: SIMILAR_ADS_COUNT}, createAd);
 
-  for (let i = 0; i < 10; i++) {
-    ads.push(createAd(i));
-  }
 
-  return ads;
-};
-
-createAds();
