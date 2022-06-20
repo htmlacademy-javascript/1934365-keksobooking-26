@@ -2,8 +2,15 @@ const CHECKTIME = ['12:00', '13:00', '14:00'];
 const DESCRIPTIONS = ['Уютный и небольшой отель, окутанный атмосферой непринужденности, в которой каждый гость почувствует себя комфортно',
   'Мини-отель бизнес класса, удачно сочетающий в себе лучшие традиции европейского сервиса и колорит старого Русского города',
   'Ультрасовременный 5-звездочный отель, специально созданный для взыскательных путешественников, которые ценят эксклюзивность, персонализированный сервис и превосходное качество'];
+const MAX_AVATAR_VALUE = 10;
 const MAX_GUESTS_VALUE = 10;
 const MAX_ROOMS_VALUE = 6;
+const MIN_LAT_VALUE = 35.65;
+const MAX_LAT_VALUE = 35.7;
+const MIN_LNG_VALUE = 139.7;
+const MAX_LNG_VALUE = 139.8;
+const MIN_PRICE_VALUE = 800;
+const MAX_PRICE_VALUE = 20000;
 const TITLES = ['Отель Платан', 'Авангард Отель', 'Бутик-отель Бристоль', 'Аэроотель', 'Хилтон Гарден Инн ', 'Отель Хэмингуэй', 'Гостиница Резидент', 'Римар Отель', 'Forum Plaza', 'Golden Tulip'];
 const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -26,9 +33,13 @@ const getRandomPositiveFloat = function (a, b, digits = 5) {
   return +result.toFixed(digits);
 };
 
+const getRandomArrayElement = function(elements) {
+  return elements[getRandomPositiveInteger(0, elements.length - 1)];
+};
+
 const makeAvatar = function () {
   const avatars = [];
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= MAX_AVATAR_VALUE; i++) {
 
     if (i < 10) {
       avatars.push(`0${  i}`);
@@ -41,12 +52,12 @@ const makeAvatar = function () {
 
 const getRoomsValue = function () {
 
-  return Math.floor(Math.random() * Math.abs(MAX_ROOMS_VALUE));
+  return Math.floor(Math.random() * MAX_ROOMS_VALUE);
 };
 
 const getGuestsValue = function () {
 
-  return Math.floor(Math.random() * Math.abs(MAX_GUESTS_VALUE));
+  return Math.floor(Math.random() * MAX_GUESTS_VALUE);
 };
 
 const getFeatures = function () {
@@ -82,24 +93,24 @@ const getPhotos = function () {
 };
 
 const createAd = function () {
-  const randomLat = getRandomPositiveFloat(35.65, 35.7);
-  const randomLng = getRandomPositiveFloat(139.7, 139.8);
+  const randomLat = getRandomPositiveFloat(MIN_LAT_VALUE, MAX_LAT_VALUE);
+  const randomLng = getRandomPositiveFloat(MIN_LNG_VALUE, MAX_LNG_VALUE);
 
   return {
     author: {
       avatar: `img/avatars/user${  makeAvatar()  }.png`
     },
     offer: {
-      title: TITLES[getRandomPositiveInteger(0, TITLES.length - 1)],
+      title: getRandomArrayElement(TITLES),
       adress: `${randomLat  }, ${  randomLng}`,
-      price: getRandomPositiveInteger(800, 20000),
-      type: TYPES[getRandomPositiveInteger(0, TYPES.length - 1)],
+      price: getRandomPositiveInteger(MIN_PRICE_VALUE, MAX_PRICE_VALUE),
+      type: getRandomArrayElement(TYPES),
       rooms: getRoomsValue(),
       guests: getGuestsValue(),
-      checkin: CHECKTIME[getRandomPositiveInteger(0, CHECKTIME.length - 1)],
-      checkout: CHECKTIME[getRandomPositiveInteger(0, CHECKTIME.length - 1)],
+      checkin: getRandomArrayElement(CHECKTIME),
+      checkout: getRandomArrayElement(CHECKTIME),
       features: getFeatures(),
-      description: DESCRIPTIONS[getRandomPositiveInteger(0, DESCRIPTIONS.length - 1)],
+      description: getRandomArrayElement(DESCRIPTIONS),
       photos: getPhotos()
     },
     location: {
@@ -109,9 +120,6 @@ const createAd = function () {
   };
 };
 
-createAd();
-
-// eslint-disable-next-line no-unused-vars
-const ads = Array.from({length: SIMILAR_ADS_COUNT}, createAd);
+Array.from({length: SIMILAR_ADS_COUNT}, createAd);
 
 
