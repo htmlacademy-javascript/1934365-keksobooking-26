@@ -1,8 +1,7 @@
-const CHECKTIME = ['12:00', '13:00', '14:00'];
+const CHECK_TIME = ['12:00', '13:00', '14:00'];
 const DESCRIPTIONS = ['Уютный и небольшой отель, окутанный атмосферой непринужденности, в которой каждый гость почувствует себя комфортно',
   'Мини-отель бизнес класса, удачно сочетающий в себе лучшие традиции европейского сервиса и колорит старого Русского города',
   'Ультрасовременный 5-звездочный отель, специально созданный для взыскательных путешественников, которые ценят эксклюзивность, персонализированный сервис и превосходное качество'];
-const MAX_AVATAR_VALUE = 10;
 const MAX_GUESTS_VALUE = 10;
 const MAX_ROOMS_VALUE = 6;
 const MIN_LAT_VALUE = 35.65;
@@ -37,59 +36,47 @@ const getRandomArrayElement = function(elements) {
   return elements[getRandomPositiveInteger(0, elements.length - 1)];
 };
 
-const makeAvatar = function () {
+function createRandomAvatar (min, max) {
   const avatars = [];
-  for (let i = 1; i <= MAX_AVATAR_VALUE; i++) {
 
-    if (i < 10) {
-      avatars.push(`0${  i}`);
-    } else {
-      avatars.push(i);
+  return function () {
+    let currentValue = getRandomPositiveInteger(min, max);
+    if (avatars.length >= (max - min + 1)) {
+
+      return null;
+    }
+    while (avatars.includes(currentValue)) {
+      currentValue = getRandomPositiveInteger(min, max);
+    }
+    avatars.push(currentValue);
+    if ( currentValue < 10) {
+      return `0${  currentValue}`;
+    }
+    return currentValue;
+  };
+}
+
+const generateAvatar = createRandomAvatar(1, SIMILAR_ADS_COUNT);
+
+const getRandomValue = function (value) {
+
+  return Math.floor(Math.random() * value);
+};
+
+const getRandomArray = function (array) {
+  const maxLength = array.length;
+  const lengthOfNewArray = getRandomPositiveInteger(1, maxLength);
+  const newArray = [];
+
+  for (let i = 0; i <= lengthOfNewArray; i++) {
+    const indexOfNewElement = getRandomPositiveInteger(0, lengthOfNewArray);
+    const newElement = array[indexOfNewElement];
+
+    if (!newArray.includes(newElement)) {
+      newArray.push(newElement);
     }
   }
-  return avatars[getRandomPositiveInteger(0, avatars.length - 1)];
-};
-
-const getRoomsValue = function () {
-
-  return Math.floor(Math.random() * MAX_ROOMS_VALUE);
-};
-
-const getGuestsValue = function () {
-
-  return Math.floor(Math.random() * MAX_GUESTS_VALUE);
-};
-
-const getFeatures = function () {
-  const maxLength = FEATURES.length;
-  const lengthOfNewFeatures = getRandomPositiveInteger(1, maxLength);
-  const newFeatures = [];
-
-  for (let i = 0; i <= lengthOfNewFeatures; i++) {
-    const indexOfNewElement = getRandomPositiveInteger(0, lengthOfNewFeatures);
-    const newElement = FEATURES[indexOfNewElement];
-
-    if (!newFeatures.includes(newElement)) {
-      newFeatures.push(newElement);
-    }
-  }
-  return newFeatures;
-};
-
-const getPhotos = function () {
-  const maxLength = PHOTOS.length;
-  const lengthOfNewPhotos = getRandomPositiveInteger(1, maxLength);
-  const newPhotos = [];
-
-  for (let i = 0; i <= lengthOfNewPhotos; i++) {
-    const indexOfNewElement = getRandomPositiveInteger(0, lengthOfNewPhotos);
-    const newElement = PHOTOS[indexOfNewElement];
-
-    if (!newPhotos.includes(newElement)) {
-      newPhotos.push(newElement);
-    }
-  }
-  return newPhotos;
+  return newArray;
 };
 
 const createAd = function () {
@@ -98,20 +85,20 @@ const createAd = function () {
 
   return {
     author: {
-      avatar: `img/avatars/user${  makeAvatar()  }.png`
+      avatar: `img/avatars/user${  generateAvatar()  }.png`
     },
     offer: {
       title: getRandomArrayElement(TITLES),
-      adress: `${randomLat  }, ${  randomLng}`,
+      address: `${randomLat  }, ${  randomLng}`,
       price: getRandomPositiveInteger(MIN_PRICE_VALUE, MAX_PRICE_VALUE),
       type: getRandomArrayElement(TYPES),
-      rooms: getRoomsValue(),
-      guests: getGuestsValue(),
-      checkin: getRandomArrayElement(CHECKTIME),
-      checkout: getRandomArrayElement(CHECKTIME),
-      features: getFeatures(),
+      rooms: getRandomValue(MAX_ROOMS_VALUE),
+      guests: getRandomValue(MAX_GUESTS_VALUE),
+      checkin: getRandomArrayElement(CHECK_TIME),
+      checkout: getRandomArrayElement(CHECK_TIME),
+      features: getRandomArray(FEATURES),
       description: getRandomArrayElement(DESCRIPTIONS),
-      photos: getPhotos()
+      photos: getRandomArray(PHOTOS)
     },
     location: {
       lat: randomLat,
