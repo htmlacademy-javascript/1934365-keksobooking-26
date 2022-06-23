@@ -36,28 +36,6 @@ const getRandomArrayElement = function(elements) {
   return elements[getRandomPositiveInteger(0, elements.length - 1)];
 };
 
-function createRandomAvatar (min, max) {
-  const avatars = [];
-
-  return function () {
-    let currentValue = getRandomPositiveInteger(min, max);
-    if (avatars.length >= (max - min + 1)) {
-
-      return null;
-    }
-    while (avatars.includes(currentValue)) {
-      currentValue = getRandomPositiveInteger(min, max);
-    }
-    avatars.push(currentValue);
-    if ( currentValue < 10) {
-      return `0${  currentValue}`;
-    }
-    return currentValue;
-  };
-}
-
-const generateAvatar = createRandomAvatar(1, SIMILAR_ADS_COUNT);
-
 const getRandomValue = function (value) {
 
   return Math.floor(Math.random() * value);
@@ -65,39 +43,42 @@ const getRandomValue = function (value) {
 
 const getRandomArray = function (array) {
   const maxLength = array.length;
-  const lengthOfNewArray = getRandomPositiveInteger(1, maxLength);
+  const lengthOfNewArray = getRandomPositiveInteger(0, maxLength);
   const newArray = [];
 
   for (let i = 0; i <= lengthOfNewArray; i++) {
-    const indexOfNewElement = getRandomPositiveInteger(0, lengthOfNewArray);
+    const indexOfNewElement = getRandomPositiveInteger(0, lengthOfNewArray - 1);
     const newElement = array[indexOfNewElement];
 
     if (!newArray.includes(newElement)) {
       newArray.push(newElement);
     }
   }
+
   return newArray;
 };
 
-const createAd = function () {
+const adds = [];
+
+for (let i = 0; i <= SIMILAR_ADS_COUNT; i++) {
   const randomLat = getRandomPositiveFloat(MIN_LAT_VALUE, MAX_LAT_VALUE);
   const randomLng = getRandomPositiveFloat(MIN_LNG_VALUE, MAX_LNG_VALUE);
-
-  return {
+  const avatarNumber = i < 10 ? `0${i}` : i;
+  adds[i] = {
     author: {
-      avatar: `img/avatars/user${  generateAvatar()  }.png`
+      avatar: `img/avatars/user${avatarNumber}.png`
     },
     offer: {
       title: getRandomArrayElement(TITLES),
-      address: `${randomLat  }, ${  randomLng}`,
+      address: `${randomLat, randomLng}`,
       price: getRandomPositiveInteger(MIN_PRICE_VALUE, MAX_PRICE_VALUE),
       type: getRandomArrayElement(TYPES),
       rooms: getRandomValue(MAX_ROOMS_VALUE),
       guests: getRandomValue(MAX_GUESTS_VALUE),
       checkin: getRandomArrayElement(CHECK_TIME),
       checkout: getRandomArrayElement(CHECK_TIME),
-      features: getRandomArray(FEATURES),
       description: getRandomArrayElement(DESCRIPTIONS),
+      features: getRandomArray(FEATURES),
       photos: getRandomArray(PHOTOS)
     },
     location: {
@@ -105,8 +86,6 @@ const createAd = function () {
       lng: randomLng
     }
   };
-};
-
-Array.from({length: SIMILAR_ADS_COUNT}, createAd);
+}
 
 
