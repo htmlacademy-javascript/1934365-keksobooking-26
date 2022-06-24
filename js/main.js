@@ -70,7 +70,7 @@ for (let i = 0; i <= SIMILAR_ADS_COUNT; i++) {
     },
     offer: {
       title: getRandomArrayElement(TITLES),
-      address: `${randomLat, randomLng}`,
+      address: `${randomLat}, ${randomLng}`,
       price: getRandomPositiveInteger(MIN_PRICE_VALUE, MAX_PRICE_VALUE),
       type: getRandomArrayElement(TYPES),
       rooms: getRandomValue(MAX_ROOMS_VALUE),
@@ -87,5 +87,4 @@ for (let i = 0; i <= SIMILAR_ADS_COUNT; i++) {
     }
   };
 }
-
 
