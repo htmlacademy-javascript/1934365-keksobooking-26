@@ -27,7 +27,7 @@ const createAdds = function () {
     const avatarNumber = i < 10 ? `0${i}` : i;
     adds[i] = {
       author: {
-        avatar: `img/avatars/user${avatarNumber}.png`
+        avatar: `./img/avatars/user${avatarNumber}.png`
       },
       offer: {
         title: getRandomArrayElement(TITLES),
