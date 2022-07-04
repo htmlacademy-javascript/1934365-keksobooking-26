@@ -2,11 +2,15 @@ import {createAdds} from './data.js';
 
 const cardPlace = document.querySelector('.map');
 const cardPlaceElement = cardPlace.querySelector('#map-canvas');
-const cardTemplate = document.querySelector('#card').content.querySelector('.popup'); //Находим в содержимом шаблона блок с классом popup
 
-const similarAdds = createAdds();//Присваиваем переменной значение функции по созданию массива с объектами
+//Находим в содержимом шаблона блок с классом popup
+const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const accomodationType = {// Словарь видов жилья
+//Присваиваем переменной значение функции по созданию массива с объектами
+const similarAdds = createAdds();
+
+// Словарь видов жилья
+const accommodationType = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -15,14 +19,24 @@ const accomodationType = {// Словарь видов жилья
 };
 
 const generateFeatures = (featureArray) => {
-  const featuresFragmentElement = document.createDocumentFragment();//Создаём документ-фрагмент
-  const featureTemplateElement = cardTemplate.querySelector('.popup__features').cloneNode(true);//Клонируем список
-  const featureListTemplateElement = featureTemplateElement.querySelectorAll('.popup__feature');//Создаём коллекцию (массив) элементов списка
-  const makeFeatureArray = featureArray.map((item) => `popup__feature--${item}`);//Создаём функцию по созданию модифицированного массива
-  featureListTemplateElement.forEach((listItem) => {//Для каждого элемента списка проводим сл.операцию
-    const cssModifier = listItem.classList[1];//С помощью свойства classList выбираем эл-т popup__feature--*** и присваиваем его значение переменной
-    if (makeFeatureArray.includes(cssModifier)) {//Если в модифицированном массиве есть модификатор, то
-      featuresFragmentElement.appendChild(listItem);//добавляем элемент списка в документ-фрагмент
+
+  //Создаём документ-фрагмент
+  const featuresFragmentElement = document.createDocumentFragment();
+  //Клонируем список
+  const featureTemplateElement = cardTemplate.querySelector('.popup__features').cloneNode(true);
+  //Создаём коллекцию (массив) элементов списка
+  const featureListTemplateElement = featureTemplateElement.querySelectorAll('.popup__feature');
+  //Создаём функцию по созданию модифицированного массива
+  const makeFeatureArray = featureArray.map((item) => `popup__feature--${item}`);
+
+  //Для каждого элемента списка проводим сл.операцию
+  featureListTemplateElement.forEach((listItem) => {
+    //С помощью свойства classList выбираем эл-т popup__feature--*** и присваиваем его значение переменной
+    const cssModifier = listItem.classList[1];
+    //Если в модифицированном массиве есть модификатор, то
+    if (makeFeatureArray.includes(cssModifier)) {
+      //добавляем элемент списка в документ-фрагмент
+      featuresFragmentElement.appendChild(listItem);
     }
   });
 
@@ -41,30 +55,38 @@ const generatePhotos = (photoArray) => {
 };
 
 similarAdds.forEach((card) => {
+  //Клонируем блок шаблона
+  const cardElement = cardTemplate.cloneNode(true);
+  //находим в шаблоне элемент с классом popup__title и записываем в его содержимое данные из массива
+  cardElement.querySelector('.popup__title').textContent = card.offer.title;
+  cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
+  cardElement.querySelector('.popup__text--price').textContent = `${card.offer.price  } ₽/ночь`;
 
-  const cardElement = cardTemplate.cloneNode(true);//Клонируем блок шаблона
-  cardElement.querySelector('.popup__title').textContent = card.offer.title;//находим в шаблоне элемент с классом popup__title и записываем в его содержимое данные из массива
-  cardElement.querySelector('.popup__text--address').textContent = card.offer.address;//то же самое
-  cardElement.querySelector('.popup__text--price').textContent = `${card.offer.price  } ₽/ночь`;//то же самое
-  const typeArray = Object.keys(accomodationType);
+  const typeArray = Object.keys(accommodationType);
   if (typeArray.includes(card.offer.type)) {
-    cardElement.querySelector('.popup__type').textContent = accomodationType[card.offer.type];
+    cardElement.querySelector('.popup__type').textContent = accommodationType[card.offer.type];
   }
-  cardElement.querySelector('.popup__text--capacity').textContent = `${card.offer.rooms  } комнаты для ${card.offer.guests} гостей`;//то же самое
-  cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${card.offer.checkin  } выезд до ${card.offer.checkout}`;//то же самое
+
+  cardElement.querySelector('.popup__text--capacity').textContent = `${card.offer.rooms  } комнаты для ${card.offer.guests} гостей`;
+  cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${card.offer.checkin  } выезд до ${card.offer.checkout}`;
+
   if (card.offer.features) {
-    cardElement.querySelector('.popup__features').textContent = '';//Очищаем разметку блока features от элементов
-    cardElement.querySelector('.popup__features').appendChild(generateFeatures(card.offer.features));//добавляем в DOM элементы массива
+    //Очищаем разметку блока features от элементов
+    cardElement.querySelector('.popup__features').textContent = '';
+    //добавляем в DOM элементы массива
+    cardElement.querySelector('.popup__features').appendChild(generateFeatures(card.offer.features));
   } else {
-    cardElement.querySelector('.popup__features').remove();//удаляем лишние элементы из разметки
+    //удаляем лишние элементы из разметки
+    cardElement.querySelector('.popup__features').remove();
   }
-  const descriptionElement = cardElement.querySelector('.popup__description').textContent = card.offer.description;//то же самое
+
+  const descriptionElement = cardElement.querySelector('.popup__description').textContent = card.offer.description;
   if (card.offer.description === '') {
     descriptionElement.classList.add('visually-hidden');
   }
+
   cardElement.querySelector('.popup__photos').textContent = '';
   cardElement.querySelector('.popup__photos').appendChild(generatePhotos(card.offer.photos));
-
 
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
 
