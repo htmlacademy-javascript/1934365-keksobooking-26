@@ -21,10 +21,10 @@ const SIMILAR_ADS_COUNT = 10;
 
 const createAdds = function () {
   const adds = [];
-  for (let i = 1; i <= SIMILAR_ADS_COUNT; i++) {
+  for (let i = 0; i <= SIMILAR_ADS_COUNT; i++) {
     const randomLat = getRandomPositiveFloat(MIN_LAT_VALUE, MAX_LAT_VALUE);
     const randomLng = getRandomPositiveFloat(MIN_LNG_VALUE, MAX_LNG_VALUE);
-    const avatarNumber = i < 10 ? `0${i}` : i;
+    const avatarNumber = i < 10 ? `0${i + 1}` : i;
     adds[i] = {
       author: {
         avatar: `./img/avatars/user${avatarNumber}.png`
