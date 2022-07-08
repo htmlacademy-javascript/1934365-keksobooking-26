@@ -17,11 +17,11 @@ const TITLES = ['Отель Платан', 'Авангард Отель', 'Бу�
 const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const PHOTOS = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg', 'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
-const SIMILAR_ADS_COUNT = 10;
+const SIMILAR_ADS_COUNT = 1;
 
 const createAdds = function () {
   const adds = [];
-  for (let i = 0; i <= SIMILAR_ADS_COUNT; i++) {
+  for (let i = 0; i <= SIMILAR_ADS_COUNT - 1; i++) {
     const randomLat = getRandomPositiveFloat(MIN_LAT_VALUE, MAX_LAT_VALUE);
     const randomLng = getRandomPositiveFloat(MIN_LNG_VALUE, MAX_LNG_VALUE);
     const avatarNumber = i < 10 ? `0${i + 1}` : i;

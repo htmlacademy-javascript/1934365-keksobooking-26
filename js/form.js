@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const getFormDisabled = () => {
   const adForm = document.querySelector('.ad-form');
   adForm.classList.add('ad-form--disabled');
@@ -14,4 +15,4 @@ const getFormDisabled = () => {
   return getFormDisabled;
 };
 
-getFormDisabled();
+
