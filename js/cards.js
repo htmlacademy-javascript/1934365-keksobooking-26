@@ -19,26 +19,6 @@ const accommodationType = {
 };
 
 const generateFeatures = (features) => {
-
-  // // Создаём документ-фрагмент
-  // const featuresFragmentElement = document.createDocumentFragment();
-  // // Клонируем список
-  // const featureTemplateElement = cardTemplate.querySelector('.popup__features').cloneNode(true);
-  // // Создаём коллекцию (массив) элементов списка
-  // const featureListTemplateElement = featureTemplateElement.querySelectorAll('.popup__feature');
-  // // Создаём функцию по созданию модифицированного массива
-  // const makeFeatures = features.map((item) => `popup__feature--${item}`);
-
-  // // Для каждого элемента списка проводим сл.операцию
-  // featureListTemplateElement.forEach((listItem) => {
-  //   // С помощью свойства classList выбираем эл-т popup__feature--*** и присваиваем его значение переменной
-  //   const cssModifier = listItem.classList[`popup__feature--${item}`];
-  //   // Если в модифицированном массиве есть модификатор, то
-  //   if (makeFeatures.includes(cssModifier)) {
-  //     // добавляем элемент списка в документ-фрагмент
-  //     featuresFragmentElement.appendChild(listItem);
-  //   }
-  // });
   const featuresFragmentElement = document.createDocumentFragment();
 
   for (let i = 0; i < features.length; i++) {
