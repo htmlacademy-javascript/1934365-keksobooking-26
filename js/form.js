@@ -1,17 +1,24 @@
-const getFormDisabled = () => {
-  const adForm = document.querySelector('.ad-form');
-  adForm.classList.add('ad-form--disabled');
+const toggleFormDisability = () => {
+  const adFormElement = document.querySelector('.ad-form');
+  const fieldsetElement = adFormElement.querySelectorAll('fieldset');
+  const mapFiltersElement = document.querySelector('.map__filters');
+  const mapFilterElement = document.querySelectorAll('select');
 
-  const fieldsetDisabled = adForm.querySelectorAll('fieldset');
-  fieldsetDisabled.forEach((i) => i.setAttribute('disabled', 'disabled'));
+  const getDisabledForm = (disabledItem) => {
+    disabledItem.classList.add('ad-form--disabled');
+  };
 
-  const mapFilters = document.querySelector('.map__filters');
-  mapFilters.classList.add('ad-form--disabled');
+  getDisabledForm(adFormElement);
+  getDisabledForm(mapFiltersElement);
 
-  const mapFilter = document.querySelectorAll('select');
-  mapFilter.forEach((i) => i.setAttribute('disabled', 'disabled'));
+  const getDisabledElement = (disabledItem) => {
+    disabledItem.forEach((item) => item.setAttribute('disabled', 'disabled'));
+  };
 
-  return getFormDisabled;
+  getDisabledElement(fieldsetElement);
+  getDisabledElement(mapFilterElement);
+
+  return toggleFormDisability;
 };
 
-getFormDisabled();
+export {toggleFormDisability};
