@@ -17,8 +17,6 @@ const toggleFormDisability = () => {
 
   getDisabledElement(fieldsetElement);
   getDisabledElement(mapFilterElement);
-
-  return toggleFormDisability;
 };
 
 export {toggleFormDisability};
