@@ -1,4 +1,5 @@
 import './cards.js';
-import {toggleFormDisability} from './form.js';
+import {toggleFormDisability, toggleFormEnability} from './form.js';
 
 toggleFormDisability();
+toggleFormEnability();
