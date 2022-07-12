@@ -1,5 +1,5 @@
 import './cards.js';
-import {toggleFormDisability, toggleFormEnability} from './form.js';
+import {makeFormDisabled, makeFormEnabled} from './form.js';
 
-toggleFormDisability();
-toggleFormEnability();
+makeFormDisabled();
+makeFormEnabled();

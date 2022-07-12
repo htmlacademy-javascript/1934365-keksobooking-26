@@ -13,7 +13,7 @@ const addAttribute = (disabledItem) => {
   disabledItem.forEach((element) => element.setAttribute('disabled', 'disabled'));
 };
 
-const toggleFormDisability = () => {
+const makeFormDisabled = () => {
   forms.forEach((element) => addClass(element));
   attributes.forEach((element) => addAttribute(element));
 };
@@ -26,9 +26,9 @@ const removeAttribute = (disabledItem) => {
   disabledItem.forEach((element) => element.removeAttribute('disabled', 'disabled'));
 };
 
-const toggleFormEnability = () => {
+const makeFormEnabled = () => {
   forms.forEach((element) => removeClass(element));
   attributes.forEach((element) => removeAttribute(element));
 };
 
-export {toggleFormDisability, toggleFormEnability};
+export {makeFormDisabled, makeFormEnabled};
