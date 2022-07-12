@@ -85,9 +85,12 @@
             <p class="ad-form-header__info">Заполните все обязательные поля, назначьте цену, загрузите аватар и фото жилья. Придумайте интересное описание. Оно сделает объявление более живым и привлекательным. Получившееся объявление должно давать гостям полное представление о вашем жилье.</p>
           </div>
         </fieldset>
-        <fieldset class="ad-form__element ad-form__element--wide">
+        <fieldset class="ad-form__element ad-form__element--wide form-group">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="30" maxlength="100" required>
+          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" minlength="30" maxlength="100" required
+            data-pristine-required-message="Обязательное текстовое поле"
+            data-pristine-minlength-message="Минимальная длина — 30 символов"
+            data-pristine-maxlength-message="Максимальная длина — 100 символов">
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
@@ -121,22 +124,22 @@
             <option value="14:00">Выезд до 14</option>
           </select>
         </fieldset>
-        <fieldset class="ad-form__element">
+        <fieldset class="ad-form__element form-group">
           <label class="ad-form__label" for="room_number">Количество комнат</label>
           <select id="room_number" name="rooms">
-            <option value="1" selected>1 комната</option>
-            <option value="2">2 комнаты</option>
-            <option value="3">3 комнаты</option>
-            <option value="100">100 комнат</option>
+            <option value="1 комната" selected>1 комната</option>
+            <option value="2 комнаты">2 комнаты</option>
+            <option value="3 комнаты">3 комнаты</option>
+            <option value="100 комнат">100 комнат</option>
           </select>
         </fieldset>
-        <fieldset class="ad-form__element">
+        <fieldset class="ad-form__element form-group">
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
-            <option value="3" selected>для 3 гостей</option>
-            <option value="2">для 2 гостей</option>
-            <option value="1">для 1 гостя</option>
-            <option value="0">не для гостей</option>
+            <option value="для 3 гостей" selected>для 3 гостей</option>
+            <option value="для 2 гостей">для 2 гостей</option>
+            <option value="для 1 гостя">для 1 гостя</option>
+            <option value="не для гостей">не для гостей</option>
           </select>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide features">
@@ -228,6 +231,8 @@
       <button type="button" class="error__button">Попробовать снова</button>
     </div>
   </template>
+
+  <script src="./pristine/pristine.min.js"></script>
   <script src="./js/main.js" type="module"></script>
 </body>
 </html>
