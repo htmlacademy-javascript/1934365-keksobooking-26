@@ -41,6 +41,7 @@ const getRoomCapacity = () => {
 };
 
 const validateRoomNumber = () => roomCapacity[roomNumberListElement.value].includes(getRoomCapacity(capacityListElement.value));
+
 const getRoomErrorMessage = () => {
   if (roomNumberListElement.value === '1') {
     return `${roomNumberListElement.value} комната не подходит для ${capacityListElement.value} гостей`;
@@ -53,28 +54,29 @@ const getRoomErrorMessage = () => {
   }
 };
 
-pristine.addValidator(roomNumberListElement, validateRoomNumber, getRoomErrorMessage);
-pristine.addValidator(capacityListElement, validateRoomNumber, getRoomErrorMessage);
-
-const onInputPriceChange = () => {
+const onHousingTypeElementChange = () => {
   userFieldPriceElement.placeholder = minPriceForAccommodation[housingTypeElement.value];
 };
-housingTypeElement.addEventListener('change', onInputPriceChange);
 
-const onInputTimeInChange = () => {
+const onTimeInElementChange = () => {
   timeOutElement.value = timeInElement.value;
 };
-const onInputTimeOutChange = () => {
+
+const onTimeOutElementChange = () => {
   timeInElement.value = timeOutElement.value;
 };
-timeInElement.addEventListener('change', onInputTimeInChange);
-timeOutElement.addEventListener('change', onInputTimeOutChange);
 
-const onFormSubmit = (evt) => {
+pristine.addValidator(roomNumberListElement, validateRoomNumber, getRoomErrorMessage);
+pristine.addValidator(capacityListElement, validateRoomNumber, getRoomErrorMessage);
+housingTypeElement.addEventListener('change', onHousingTypeElementChange);
+timeInElement.addEventListener('change', onTimeInElementChange);
+timeOutElement.addEventListener('change', onTimeOutElementChange);
+
+const onFormElementSubmit = (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
 
   return isValid;
 };
 
-formElement.addEventListener('submit', onFormSubmit);
+formElement.addEventListener('submit', onFormElementSubmit);
