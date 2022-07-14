@@ -14,13 +14,13 @@ const pristine = new Pristine(formElement, {
 });
 
 const roomCapacity = {
-  '1 комната': ['для 1 гостя'],
-  '2 комнаты': ['для 2 гостей', 'для 1 гостя'],
-  '3 комнаты': ['для 3 гостей', 'для 2 гостей', 'для 1 гостя'],
-  '100 комнат': ['не для гостей']
+  1: ['для 1 гостя'],
+  2: ['для 2 гостей', 'для 1 гостя'],
+  3: ['для 3 гостей', 'для 2 гостей', 'для 1 гостя'],
+  100: ['не для гостей']
 };
 
-const minPrice = {
+const minPriceForAccommodation = {
   bungalow: 0,
   flat: 1000,
   hotel: 3000,
@@ -28,23 +28,53 @@ const minPrice = {
   palace: 10000
 };
 
-const validateRoomNumber = () => roomCapacity[roomNumberListElement.value].includes(capacityListElement.value);
-const getRoomErrorMessage = () => `${roomNumberListElement.value} ${roomNumberListElement.value === '1 комната' ? 'не подходит' : 'не подходят'} ${capacityListElement.value}`;
+const getRoomCapacity = () => {
+  if (capacityListElement.value === '0') {
+    return 'не для гостей';
+  }
+  else if (capacityListElement.value === '1') {
+    return 'для 1 гостя';
+  }
+  else {
+    return `для ${capacityListElement.value} гостей`;
+  }
+};
+
+const validateRoomNumber = () => roomCapacity[roomNumberListElement.value].includes(getRoomCapacity(capacityListElement.value));
+const getRoomErrorMessage = () => {
+  if (roomNumberListElement.value === '1') {
+    return `${roomNumberListElement.value} комната не подходит для ${capacityListElement.value} гостей`;
+  }
+  else if (roomNumberListElement.value === '100') {
+    return `${roomNumberListElement.value} комнат не подходит для ${capacityListElement.value} ${capacityListElement.value === '1' ? 'гостя' : 'гостей'}`;
+  }
+  else {
+    return `${roomNumberListElement.value} комнаты не подходят для ${capacityListElement.value} ${capacityListElement.value === '1' ? 'гостя' : 'гостей'}`;
+  }
+};
 
 pristine.addValidator(roomNumberListElement, validateRoomNumber, getRoomErrorMessage);
 pristine.addValidator(capacityListElement, validateRoomNumber, getRoomErrorMessage);
 
-housingTypeElement.addEventListener('change', () => {
-  userFieldPriceElement.placeholder = minPrice[housingTypeElement.value];
-});
+const onInputPriceChange = () => {
+  userFieldPriceElement.placeholder = minPriceForAccommodation[housingTypeElement.value];
+};
+housingTypeElement.addEventListener('change', onInputPriceChange);
 
-timeInElement.addEventListener('change', () => (timeOutElement.value = timeInElement.value));
-timeOutElement.addEventListener('change', () => (timeInElement.value = timeOutElement.value));
+const onInputTimeInChange = () => {
+  timeOutElement.value = timeInElement.value;
+};
+const onInputTimeOutChange = () => {
+  timeInElement.value = timeOutElement.value;
+};
+timeInElement.addEventListener('change', onInputTimeInChange);
+timeOutElement.addEventListener('change', onInputTimeOutChange);
 
-formElement.addEventListener('submit', (evt) => {
+const onFormSubmit = (evt) => {
   evt.preventDefault();
-
   const isValid = pristine.validate();
 
   return isValid;
-});
+};
+
+formElement.addEventListener('submit', onFormSubmit);
