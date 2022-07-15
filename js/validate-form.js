@@ -73,8 +73,12 @@ timeInElement.addEventListener('change', onTimeInElementChange);
 timeOutElement.addEventListener('change', onTimeOutElementChange);
 
 const onFormElementSubmit = (evt) => {
+  evt.preventDefault();
   const isValid = pristine.validate();
-  if (!isValid) {evt.preventDefault();}
+
+  if (isValid) {
+    evt.target.submit();
+  }
 };
 
 formElement.addEventListener('submit', onFormElementSubmit);
