@@ -31,4 +31,4 @@ const makeFormEnabled = () => {
   attributes.forEach((element) => removeAttribute(element));
 };
 
-export {makeFormDisabled, makeFormEnabled};
+export {makeFormEnabled, makeFormDisabled};

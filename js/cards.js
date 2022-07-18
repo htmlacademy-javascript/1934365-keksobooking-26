@@ -1,13 +1,5 @@
-import {createAdds} from './data.js';
-
-const cardPlace = document.querySelector('.map');
-const cardPlaceElement = cardPlace.querySelector('#map-canvas');
-
 // Находим в содержимом шаблона блок с классом popup
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
-
-// Присваиваем переменной значение функции по созданию массива с объектами
-const similarAdds = createAdds();
 
 // Словарь видов жилья
 const accommodationType = {
@@ -70,7 +62,7 @@ const getDescription = (descriptionName, addTemplateElement) => {
   }
 };
 
-similarAdds.forEach((card) => {
+const similarAdds = (card) => {
   // Клонируем блок шаблона
   const cardElement = cardTemplate.cloneNode(true);
   // находим в шаблоне элемент с классом popup__title и записываем в его содержимое данные из массива
@@ -92,7 +84,8 @@ similarAdds.forEach((card) => {
   cardElement.querySelector('.popup__photos').innerHTML = '';
   cardElement.querySelector('.popup__photos').appendChild(generatePhotos(card.offer.photos));
 
-  cardPlaceElement.appendChild(cardElement);
-});
+  return cardElement;
+};
 
+export {similarAdds};
 
