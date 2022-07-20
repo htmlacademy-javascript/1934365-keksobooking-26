@@ -1,12 +1,14 @@
 import {similarAdds} from './cards.js';
-
+import {setSliderValue} from './slider.js';
+import {onHousingTypeElementChange} from './validate-form.js';
+import {adFormElement} from './form.js';
 const START_COORDINATE = {
   lat: 35.68948,
   lng: 139.69170,
 };
-const ZOOM_MAP = 10;
+const ZOOM_MAP = 13;
 const addressElement = document.querySelector('#address');
-// const resetElement = document.querySelector('.ad-form__reset');
+const resetElement = document.querySelector('.ad-form__reset');
 
 const mainIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -27,8 +29,11 @@ const mainPinMarker = L.marker(START_COORDINATE,
     icon: mainIcon,
   });
 
-const addressDefault = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
-addressElement.value = addressDefault;
+const getAddressDefault = () => {
+  addressElement.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
+};
+
+getAddressDefault();
 
 // Получение координат при перемещении метки и запись их в поле адрес
 mainPinMarker.on('moveend', (evt) => {
@@ -65,5 +70,27 @@ function activateMap(onLoad, offers) {
   });
 }
 
-export {activateMap};
+// Очистка формы
+const resetForm = (item) => {
+  item.reset();
+  mainPinMarker.setLatLng(START_COORDINATE);
+  map.setView(START_COORDINATE, ZOOM_MAP);
+  setSliderValue();
+  onHousingTypeElementChange();
+  setTimeout(() => {
+    getAddressDefault();
+  }, 1);
+  map.closePopup();
+};
+
+// Кнопка очистки
+const onButtonResetClick = () => {
+  resetElement.addEventListener('click', () => {
+    resetForm(adFormElement);
+  });
+};
+
+onButtonResetClick();
+
+export {activateMap, resetForm};
 
