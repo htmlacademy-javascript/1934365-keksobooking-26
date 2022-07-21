@@ -1,3 +1,5 @@
+import {makeSliderDisabled, makeSliderEnabled} from './slider.js';
+
 const adFormElement = document.querySelector('.ad-form');
 const fieldsetElements = adFormElement.querySelectorAll('fieldset');
 const mapFiltersElement = document.querySelector('.map__filters');
@@ -16,6 +18,7 @@ const addAttribute = (disabledItem) => {
 const makeFormDisabled = () => {
   forms.forEach((element) => addClass(element));
   attributes.forEach((element) => addAttribute(element));
+  makeSliderDisabled();
 };
 
 const removeClass = (disabledItem) => {
@@ -29,6 +32,10 @@ const removeAttribute = (disabledItem) => {
 const makeFormEnabled = () => {
   forms.forEach((element) => removeClass(element));
   attributes.forEach((element) => removeAttribute(element));
+  makeSliderEnabled();
 };
 
-export {makeFormEnabled, makeFormDisabled};
+export {makeFormEnabled,
+  makeFormDisabled,
+  adFormElement
+};

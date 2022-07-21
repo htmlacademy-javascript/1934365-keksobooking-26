@@ -36,11 +36,6 @@ const generatePhotos = (photos) => {
   return photoFragmentElement;
 };
 
-// Функция по добавлению в объявление типа жилья
-const getAccommodationType = (accommodationName, addTemplateElement) => {
-  addTemplateElement.querySelector('.popup__type').textContent = accommodationType[accommodationName];
-};
-
 // Функция по добавлению в объявление доп.удобств
 const getFeatures = (featuresName, addTemplateElement) => {
   if (featuresName) {
@@ -54,35 +49,45 @@ const getFeatures = (featuresName, addTemplateElement) => {
   }
 };
 
-// Функция, которая скрывает поле описания, если оно не заполнено
-const getDescription = (descriptionName, addTemplateElement) => {
-  const descriptionElement = addTemplateElement.querySelector('.popup__description').textContent = descriptionName;
-  if (!descriptionName) {
-    descriptionElement.classList.add('hidden');
+const setElementValue = (data, element, attribute) => {
+  if (data) {
+    element[attribute] = data;
+  } else {
+    element.remove();
   }
 };
 
-const similarAdds = (card) => {
+const similarAdds = (incomingData) => {
   // Клонируем блок шаблона
   const cardElement = cardTemplate.cloneNode(true);
   // находим в шаблоне элемент с классом popup__title и записываем в его содержимое данные из массива
-  cardElement.querySelector('.popup__avatar').src = card.author.avatar;
-  cardElement.querySelector('.popup__title').textContent = card.offer.title;
-  cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
-  cardElement.querySelector('.popup__text--price').textContent = `${card.offer.price  } ₽/ночь`;
+  setElementValue(incomingData.author.avatar, cardElement.querySelector('.popup__avatar'), 'src');
+  setElementValue(incomingData.offer.title, cardElement.querySelector('.popup__title'), 'textContent');
+  setElementValue(incomingData.offer.address, cardElement.querySelector('.popup__text--address'), 'textContent');
+  setElementValue(incomingData.offer.price, cardElement.querySelector('.js__price'), 'textContent');
+  setElementValue(accommodationType[incomingData.offer.type], cardElement.querySelector('.popup__type'), 'textContent');
+  setElementValue(incomingData.offer.description, cardElement.querySelector('.popup__description'), 'textContent');
 
-  getAccommodationType(card.offer.type, cardElement);
+  if (incomingData.offer.checkin && incomingData.offer.checkout) {
+    cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${incomingData.offer.checkin  } выезд до ${incomingData.offer.checkout}`;
+  } else {
+    cardElement.querySelector('.popup__text--time').remove();
+  }
 
-  // Добавить склонения комнат и гостей
-  cardElement.querySelector('.popup__text--capacity').textContent = `${card.offer.rooms  } комнаты для ${card.offer.guests} гостей`;
-  cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${card.offer.checkin  } выезд до ${card.offer.checkout}`;
+  if (incomingData.offer.rooms && incomingData.offer.guests) {
+    cardElement.querySelector('.popup__text--capacity').textContent = `${incomingData.offer.rooms  } комнаты для ${incomingData.offer.guests} гостей`;
+  } else {
+    cardElement.querySelector('.popup__text--capacity').remove();
+  }
 
-  getFeatures(card.offer.features, cardElement);
+  getFeatures(incomingData.offer.features, cardElement);
 
-  getDescription(card.offer.description, cardElement);
-
-  cardElement.querySelector('.popup__photos').innerHTML = '';
-  cardElement.querySelector('.popup__photos').appendChild(generatePhotos(card.offer.photos));
+  if (incomingData.offer.photos) {
+    cardElement.querySelector('.popup__photos').innerHTML = '';
+    cardElement.querySelector('.popup__photos').appendChild(generatePhotos(incomingData.offer.photos));
+  } else {
+    cardElement.querySelector('.popup__photos').remove();
+  }
 
   return cardElement;
 };

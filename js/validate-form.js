@@ -1,3 +1,7 @@
+import {onSubmitSend} from './api.js';
+import {displayModalSuccess, displayModalError} from './modal-window.js';
+import {resetForm} from './map.js';
+
 const formElement = document.querySelector('.ad-form');
 const roomNumberListElement = formElement.querySelector('#room_number');
 const capacityListElement = formElement.querySelector('#capacity');
@@ -5,6 +9,7 @@ const housingTypeElement = formElement.querySelector('#type');
 const userFieldPriceElement = formElement.querySelector('#price');
 const timeInElement = formElement.querySelector('#timein');
 const timeOutElement = formElement.querySelector('#timeout');
+const submitButton = formElement.querySelector('.ad-form__submit');
 
 const pristine = new Pristine(formElement, {
   classTo: 'form-group',
@@ -66,19 +71,46 @@ const onTimeOutElementChange = () => {
   timeInElement.value = timeOutElement.value;
 };
 
+// Блокирует кнопку при отправке формы
+const blockSubmitButton = () => {
+  submitButton.setAttribute('disabled', 'disabled');
+  submitButton.textContent = 'Отправляю...';
+};
+
+// Разблокирует кнопку
+const unblockSubmitButton = () => {
+  submitButton.removeAttribute('disabled', 'disabled');
+  submitButton.textContent = 'Опубликовать';
+};
+
 pristine.addValidator(roomNumberListElement, validateRoomNumber, getRoomErrorMessage);
 pristine.addValidator(capacityListElement, validateRoomNumber, getRoomErrorMessage);
 housingTypeElement.addEventListener('change', onHousingTypeElementChange);
 timeInElement.addEventListener('change', onTimeInElementChange);
 timeOutElement.addEventListener('change', onTimeOutElementChange);
 
-const onFormElementSubmit = (evt) => {
-  evt.preventDefault();
-  const isValid = pristine.validate();
+const activateFormValidation = (onSuccess, onError) => {
+  formElement.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
 
-  if (isValid) {
-    evt.target.submit();
-  }
+    if (isValid) {
+      blockSubmitButton();
+      onSubmitSend(() => {
+        onSuccess();
+        unblockSubmitButton();
+        resetForm(formElement);
+      },
+      () => {
+        onError();
+        unblockSubmitButton();
+        resetForm(formElement);
+      },
+      new FormData(evt.target));
+    }
+  });
 };
 
-formElement.addEventListener('submit', onFormElementSubmit);
+activateFormValidation(displayModalSuccess, displayModalError);
+
+export {activateFormValidation, onHousingTypeElementChange};
