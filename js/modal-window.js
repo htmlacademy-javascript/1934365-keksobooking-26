@@ -26,9 +26,9 @@ const displayModalSuccess = () => {
   showModal();
 };
 
-const displayModalError = () => {
+const displayModalError = (error) => {
   message = document.querySelector('#error').content.cloneNode(true);
-  showModal();
+  showModal(error);
 };
 
 export {displayModalSuccess, displayModalError};

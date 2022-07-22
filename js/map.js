@@ -1,12 +1,17 @@
 import {similarAdds} from './cards.js';
 import {setSliderValue} from './slider.js';
 import {onHousingTypeElementChange} from './validate-form.js';
-import {adFormElement} from './form.js';
+import {adFormElement, mapFiltersElement} from './form.js';
+import { resetPhotos } from './pictures.js';
 const START_COORDINATE = {
   lat: 35.68948,
   lng: 139.69170,
 };
 const ZOOM_MAP = 13;
+
+let map = null;
+let markerGroup = null;
+let startOffers = null;
 const addressElement = document.querySelector('#address');
 const resetElement = document.querySelector('.ad-form__reset');
 
@@ -33,22 +38,32 @@ const getAddressDefault = () => {
   addressElement.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
 };
 
-getAddressDefault();
+// getAddressDefault();
 
-// Получение координат при перемещении метки и запись их в поле адрес
-mainPinMarker.on('moveend', (evt) => {
-  const coordinates = evt.target.getLatLng();
-  addressElement.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
-});
+// Создание слоя с группой меток
 
-let map = null;
+const createSecondaryMarkers = (point) => {
+  const marker = L.marker(point.location,
+    {
+      icon: secondaryIcon,
+    },
+  );
+  marker.addTo(markerGroup).bindPopup(similarAdds(point));
+  return marker;
+};
+
+const renderMarkers = (offers) => {
+  map.closePopup();
+  markerGroup.clearLayers();
+  offers.forEach(createSecondaryMarkers);
+};
 
 function activateMap(onLoad, offers) {
+  startOffers = offers;
   // Создание карты
   map = L.map('map-canvas')
     .on('load', onLoad)
     .setView(START_COORDINATE, ZOOM_MAP);
-
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
@@ -56,23 +71,20 @@ function activateMap(onLoad, offers) {
     },
   ).addTo(map);
 
+  markerGroup = L.layerGroup().addTo(map);
   mainPinMarker.addTo(map);
 
-  // Добавление на карту второстепенных меток
-  offers.forEach((point) => {
-    const marker = L.marker(point.location,
-      {
-        icon: secondaryIcon,
-      },
-    );
-
-    marker.addTo(map).bindPopup(similarAdds(point));
+  renderMarkers(offers.slice(0, 10));
+  // Получение координат при перемещении метки и запись их в поле адрес
+  mainPinMarker.on('moveend', (evt) => {
+    const coordinates = evt.target.getLatLng();
+    addressElement.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
   });
 }
 
 // Очистка формы
-const resetForm = (item) => {
-  item.reset();
+const resetForm = () => {
+  adFormElement.reset();
   mainPinMarker.setLatLng(START_COORDINATE);
   map.setView(START_COORDINATE, ZOOM_MAP);
   setSliderValue();
@@ -81,6 +93,9 @@ const resetForm = (item) => {
     getAddressDefault();
   }, 1);
   map.closePopup();
+  renderMarkers(startOffers.slice(0, 10));
+  mapFiltersElement.reset();
+  resetPhotos();
 };
 
 // Кнопка очистки
@@ -92,5 +107,7 @@ const onButtonResetClick = () => {
 
 onButtonResetClick();
 
-export {activateMap, resetForm};
+export {activateMap,
+  resetForm,
+  renderMarkers};
 

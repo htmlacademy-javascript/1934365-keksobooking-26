@@ -1,17 +1,17 @@
 import {onSubmitSend} from './api.js';
-import {displayModalSuccess, displayModalError} from './modal-window.js';
 import {resetForm} from './map.js';
+import {adFormElement} from './form.js';
+import { updateSliderOptions } from './slider.js';
 
-const formElement = document.querySelector('.ad-form');
-const roomNumberListElement = formElement.querySelector('#room_number');
-const capacityListElement = formElement.querySelector('#capacity');
-const housingTypeElement = formElement.querySelector('#type');
-const userFieldPriceElement = formElement.querySelector('#price');
-const timeInElement = formElement.querySelector('#timein');
-const timeOutElement = formElement.querySelector('#timeout');
-const submitButton = formElement.querySelector('.ad-form__submit');
+const roomNumberListElement = adFormElement.querySelector('#room_number');
+const capacityListElement = adFormElement.querySelector('#capacity');
+const typeOfHouseOptionElement = adFormElement.querySelector('[name="type"]');
+const pricePerNightInputElement = adFormElement.querySelector('[name="price"]');
+const timeInElement = adFormElement.querySelector('#timein');
+const timeOutElement = adFormElement.querySelector('#timeout');
+const submitButton = adFormElement.querySelector('.ad-form__submit');
 
-const pristine = new Pristine(formElement, {
+const pristine = new Pristine(adFormElement, {
   classTo: 'form-group',
   errorTextParent: 'form-group',
   errorTextTag: 'fieldset',
@@ -25,12 +25,20 @@ const roomCapacity = {
   100: ['не для гостей']
 };
 
-const minPriceForAccommodation = {
-  bungalow: 0,
-  flat: 1000,
-  hotel: 3000,
-  house: 5000,
-  palace: 10000
+const MIN_PRICE_OF_HOUSE = {
+  'palace': 10000,
+  'flat': 1000,
+  'house': 5000,
+  'bungalow': 0,
+  'hotel': 3000
+};
+
+const validatePriceOfType = () => pricePerNightInputElement.value >= MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value];
+
+const getPriceErrorMessage = () => {
+  if (pricePerNightInputElement.value <= MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value]) {
+    return `минимальная цена ${MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value]}`;
+  }
 };
 
 const getRoomCapacity = () => {
@@ -60,7 +68,10 @@ const getRoomErrorMessage = () => {
 };
 
 const onHousingTypeElementChange = () => {
-  userFieldPriceElement.placeholder = minPriceForAccommodation[housingTypeElement.value];
+  pricePerNightInputElement.min = MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value];
+  pricePerNightInputElement.placeholder = `от ${MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value]}`;
+  updateSliderOptions(MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value]);
+  pristine.validate(typeOfHouseOptionElement);
 };
 
 const onTimeInElementChange = () => {
@@ -83,14 +94,15 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-pristine.addValidator(roomNumberListElement, validateRoomNumber, getRoomErrorMessage);
-pristine.addValidator(capacityListElement, validateRoomNumber, getRoomErrorMessage);
-housingTypeElement.addEventListener('change', onHousingTypeElementChange);
-timeInElement.addEventListener('change', onTimeInElementChange);
-timeOutElement.addEventListener('change', onTimeOutElementChange);
-
 const activateFormValidation = (onSuccess, onError) => {
-  formElement.addEventListener('submit', (evt) => {
+  pristine.addValidator(roomNumberListElement, validateRoomNumber, getRoomErrorMessage);
+  pristine.addValidator(capacityListElement, validateRoomNumber, getRoomErrorMessage);
+  pristine.addValidator(pricePerNightInputElement, validatePriceOfType, getPriceErrorMessage);
+  typeOfHouseOptionElement.addEventListener('change', onHousingTypeElementChange);
+  timeInElement.addEventListener('change', onTimeInElementChange);
+  timeOutElement.addEventListener('change', onTimeOutElementChange);
+
+  adFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
 
@@ -99,18 +111,15 @@ const activateFormValidation = (onSuccess, onError) => {
       onSubmitSend(() => {
         onSuccess();
         unblockSubmitButton();
-        resetForm(formElement);
+        resetForm(adFormElement);
       },
       () => {
         onError();
         unblockSubmitButton();
-        resetForm(formElement);
       },
       new FormData(evt.target));
     }
   });
 };
-
-activateFormValidation(displayModalSuccess, displayModalError);
 
 export {activateFormValidation, onHousingTypeElementChange};

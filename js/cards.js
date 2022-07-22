@@ -2,7 +2,7 @@
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 // Словарь видов жилья
-const accommodationType = {
+const ACCOMMODATION_TYPE = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -10,29 +10,25 @@ const accommodationType = {
   hotel: 'Отель'
 };
 
-const generateFeatures = (features) => {
-  const featuresFragmentElement = document.createDocumentFragment();
+const featuresFragmentElement = document.createDocumentFragment();
+const photoFragmentElement = document.createDocumentFragment();
 
+const generateFeatures = (features) => {
   for (let i = 0; i < features.length; i++) {
     const featureListTemplateElement = cardTemplate.querySelector('.popup__feature').cloneNode(true);
     featureListTemplateElement.classList.remove('popup__feature--wifi');
     featureListTemplateElement.classList.add(`popup__feature--${features[i]}`);
-
     featuresFragmentElement.appendChild(featureListTemplateElement);
   }
-
   return featuresFragmentElement;
 };
 
 const generatePhotos = (photos) => {
-  const photoFragmentElement = document.createDocumentFragment();
-
   for (let i = 0; i < photos.length; i++) {
     const photoListTemplateElement = cardTemplate.querySelector('.popup__photo').cloneNode(true);
     photoListTemplateElement.src = photos[i];
     photoFragmentElement.appendChild(photoListTemplateElement);
   }
-
   return photoFragmentElement;
 };
 
@@ -65,7 +61,7 @@ const similarAdds = (incomingData) => {
   setElementValue(incomingData.offer.title, cardElement.querySelector('.popup__title'), 'textContent');
   setElementValue(incomingData.offer.address, cardElement.querySelector('.popup__text--address'), 'textContent');
   setElementValue(incomingData.offer.price, cardElement.querySelector('.js__price'), 'textContent');
-  setElementValue(accommodationType[incomingData.offer.type], cardElement.querySelector('.popup__type'), 'textContent');
+  setElementValue(ACCOMMODATION_TYPE[incomingData.offer.type], cardElement.querySelector('.popup__type'), 'textContent');
   setElementValue(incomingData.offer.description, cardElement.querySelector('.popup__description'), 'textContent');
 
   if (incomingData.offer.checkin && incomingData.offer.checkout) {
