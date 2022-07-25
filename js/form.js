@@ -35,7 +35,11 @@ const makeFormEnabled = () => {
   makeSliderEnabled();
 };
 
-export {makeFormEnabled,
+const onLoadMap = () => {
+  makeFormEnabled();
+};
+
+export {onLoadMap,
   makeFormDisabled,
   adFormElement,
   mapFiltersElement,

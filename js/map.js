@@ -3,7 +3,9 @@ import { setSliderValue } from './slider.js';
 import { onHousingTypeElementChange } from './validate-form.js';
 import { adFormElement, mapFiltersElement } from './form.js';
 import { resetPhotos } from './pictures.js';
+import { fetchOffers } from './api.js';
 
+const COUNT_OFFERS = 10;
 const START_COORDINATE = {
   lat: 35.68948,
   lng: 139.69170,
@@ -15,7 +17,7 @@ const addressElement = document.querySelector('#address');
 const resetElement = document.querySelector('.ad-form__reset');
 let map = null;
 let markerGroup = null;
-let startOffers = null;
+let startOffers = [];
 
 const mainIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -57,8 +59,12 @@ const renderMarkers = (offers) => {
   offers.forEach(createSecondaryMarkers);
 };
 
-function activateMap(onLoad, offers) {
+const onFetchOffersLoad = (offers) => {
   startOffers = offers;
+  renderMarkers(offers.slice(0, COUNT_OFFERS));
+};
+
+const activateMap = (onLoad) => {
   // Создание карты
   map = L.map('map-canvas')
     .on('load', onLoad)
@@ -72,13 +78,15 @@ function activateMap(onLoad, offers) {
 
   markerGroup = L.layerGroup().addTo(map);
   mainPinMarker.addTo(map);
-  renderMarkers(offers.slice(0, 10));
+
+  fetchOffers(onFetchOffersLoad);
+
   // Получение координат при перемещении метки и запись их в поле адрес
   mainPinMarker.on('moveend', (evt) => {
     const coordinates = evt.target.getLatLng();
     addressElement.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
   });
-}
+};
 
 // Очистка формы
 const resetForm = () => {
@@ -91,7 +99,7 @@ const resetForm = () => {
     getAddressDefault();
   }, 1);
   map.closePopup();
-  renderMarkers(startOffers.slice(0, 10));
+  renderMarkers(startOffers.slice(0, COUNT_OFFERS));
   mapFiltersElement.reset();
   resetPhotos();
 };
