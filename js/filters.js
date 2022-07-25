@@ -1,5 +1,5 @@
 import { debounce } from './utils.js';
-import { renderMarkers } from './map.js';
+import { renderMarkers, COUNT_OFFERS } from './map.js';
 
 const RERENDER_DELAY = 500;
 const DEFAULT_VALUE = 'any';
@@ -22,14 +22,16 @@ const PriceRanges = {
   },
 };
 
-const houseTypeSelect = document.querySelector('select[name="housing-type"]');
-const roomsSelect = document.querySelector('select[name="housing-rooms"]');
-const guestsSelect = document.querySelector('select[name="housing-guests"]');
+const mapFiltersElement = document.querySelector('.map__filters');
+const houseTypeSelect = mapFiltersElement.querySelector('#housing-type');
+const roomsSelect = mapFiltersElement.querySelector('#housing-rooms');
+const guestsSelect = mapFiltersElement.querySelector('#housing-guests');
+
 
 const filterByHouseType = (type) => houseTypeSelect.value === type || houseTypeSelect.value === DEFAULT_VALUE;
 
 const filterByPrice = (price) => {
-  const priseSelect = document.querySelector('select[name="housing-price"]').value.toUpperCase();
+  const priseSelect = mapFiltersElement.querySelector('#housing-price').value.toUpperCase();
   return price >= PriceRanges[priseSelect].minPrice && price <= PriceRanges[priseSelect].maxPrice;
 };
 
@@ -37,14 +39,14 @@ const filterByRoomsCount = (roomsCount) => Number(roomsSelect.value) === roomsCo
 const filterByGuestsCount = (guestsCount) => Number(guestsSelect.value) === guestsCount || guestsSelect.value === DEFAULT_VALUE;
 
 const filterByFeatures = (features) => {
-  const checkBoxFeatures = document.querySelectorAll('.map__features :checked');
+  const checkBoxFeatures = mapFiltersElement.querySelectorAll('.map__features :checked');
   if (checkBoxFeatures.length && features) {
     return Array.from(checkBoxFeatures).every((checkFeatures) => features.includes(checkFeatures.value));
   }
   return checkBoxFeatures.length === 0;
 };
 
-const filterOffer = (offers, rerenderMarkers) => {
+const filterOffers = (offers, rerenderMarkers) => {
   const filteredOffers = offers.filter(({ offer }) =>
     filterByHouseType(offer.type) &&
     filterByPrice(offer.price) &&
@@ -52,12 +54,12 @@ const filterOffer = (offers, rerenderMarkers) => {
     filterByGuestsCount(offer.guests) &&
     filterByFeatures(offer.features)
   );
-  rerenderMarkers(filteredOffers.slice(0, 10));
+  rerenderMarkers(filteredOffers.slice(0, COUNT_OFFERS));
 };
 
 const initFilters = (offers) => {
-  const onFilterChange = debounce(() => filterOffer(offers, renderMarkers), RERENDER_DELAY);
-  document.querySelector('.map__filters').addEventListener('change', onFilterChange);
+  const onMapFiltersElementChange = debounce(() => filterOffers(offers, renderMarkers), RERENDER_DELAY);
+  mapFiltersElement.addEventListener('change', onMapFiltersElementChange);
 };
 
 export { initFilters };

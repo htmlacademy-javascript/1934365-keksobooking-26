@@ -4,6 +4,7 @@ import { onHousingTypeElementChange } from './validate-form.js';
 import { adFormElement, mapFiltersElement } from './form.js';
 import { resetPhotos } from './pictures.js';
 import { fetchOffers } from './api.js';
+import { initFilters } from './filters.js';
 
 const COUNT_OFFERS = 10;
 const START_COORDINATE = {
@@ -15,6 +16,7 @@ const ZOOM_MAP = 13;
 
 const addressElement = document.querySelector('#address');
 const resetElement = document.querySelector('.ad-form__reset');
+
 let map = null;
 let markerGroup = null;
 let startOffers = [];
@@ -59,9 +61,10 @@ const renderMarkers = (offers) => {
   offers.forEach(createSecondaryMarkers);
 };
 
-const onFetchOffersLoad = (offers) => {
+const onFetchOffersSuccessLoad = (offers) => {
   startOffers = offers;
   renderMarkers(offers.slice(0, COUNT_OFFERS));
+  initFilters(offers);
 };
 
 const activateMap = (onLoad) => {
@@ -79,7 +82,7 @@ const activateMap = (onLoad) => {
   markerGroup = L.layerGroup().addTo(map);
   mainPinMarker.addTo(map);
 
-  fetchOffers(onFetchOffersLoad);
+  fetchOffers(onFetchOffersSuccessLoad) ;
 
   // Получение координат при перемещении метки и запись их в поле адрес
   mainPinMarker.on('moveend', (evt) => {
@@ -105,15 +108,12 @@ const resetForm = () => {
 };
 
 // Кнопка очистки
-const onButtonResetClick = () => {
-  resetElement.addEventListener('click', () => {
-    resetForm(adFormElement);
-  });
-};
-
-onButtonResetClick();
+resetElement.addEventListener('click', () => {
+  resetForm(adFormElement);
+});
 
 export {activateMap,
   resetForm,
-  renderMarkers};
+  renderMarkers,
+  COUNT_OFFERS};
 

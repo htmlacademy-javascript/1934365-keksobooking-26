@@ -1,6 +1,6 @@
+import {adFormElement} from './form.js';
 import {onSubmitSend} from './api.js';
 import {resetForm} from './map.js';
-import {adFormElement} from './form.js';
 import { updateSliderOptions } from './slider.js';
 import {displayModalSuccess, displayModalError} from './modal-window.js';
 
