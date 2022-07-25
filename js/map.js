@@ -1,19 +1,21 @@
-import {similarAdds} from './cards.js';
-import {setSliderValue} from './slider.js';
-import {onHousingTypeElementChange} from './validate-form.js';
-import {adFormElement, mapFiltersElement} from './form.js';
+import { similarAdds } from './cards.js';
+import { setSliderValue } from './slider.js';
+import { onHousingTypeElementChange } from './validate-form.js';
+import { adFormElement, mapFiltersElement } from './form.js';
 import { resetPhotos } from './pictures.js';
+
 const START_COORDINATE = {
   lat: 35.68948,
   lng: 139.69170,
 };
+
 const ZOOM_MAP = 13;
 
+const addressElement = document.querySelector('#address');
+const resetElement = document.querySelector('.ad-form__reset');
 let map = null;
 let markerGroup = null;
 let startOffers = null;
-const addressElement = document.querySelector('#address');
-const resetElement = document.querySelector('.ad-form__reset');
 
 const mainIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -38,10 +40,7 @@ const getAddressDefault = () => {
   addressElement.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
 };
 
-// getAddressDefault();
-
 // Создание слоя с группой меток
-
 const createSecondaryMarkers = (point) => {
   const marker = L.marker(point.location,
     {
@@ -73,7 +72,6 @@ function activateMap(onLoad, offers) {
 
   markerGroup = L.layerGroup().addTo(map);
   mainPinMarker.addTo(map);
-
   renderMarkers(offers.slice(0, 10));
   // Получение координат при перемещении метки и запись их в поле адрес
   mainPinMarker.on('moveend', (evt) => {
