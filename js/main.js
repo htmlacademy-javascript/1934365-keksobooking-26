@@ -1,12 +1,12 @@
-import {makeFormEnabled, makeFormDisabled} from './form.js';
-import {activateMap} from './map.js';
-import {fetchOffers, onSubmitSend} from './api.js';
-import './cards.js';
-import './validate-form.js';
-import './slider.js';
+import { onLoadMap, makeFormDisabled } from './form.js';
+import { activateMap } from './map.js';
+import { activateFormValidation } from './validate-form.js';
+import { initPhoto } from './pictures.js';
 
 makeFormDisabled();
 
-fetchOffers((offers) => activateMap(makeFormEnabled, offers));
+activateMap(onLoadMap);
 
-onSubmitSend();
+activateFormValidation();
+
+initPhoto();

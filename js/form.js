@@ -7,7 +7,7 @@ const mapFilterElements = document.querySelectorAll('select');
 const forms = [adFormElement, mapFiltersElement];
 const attributes = [fieldsetElements, mapFilterElements];
 
-const addClass = (disabledItem) => {
+const addClassFiltersDisabled = (disabledItem) => {
   disabledItem.classList.add('ad-form--disabled');
 };
 
@@ -16,7 +16,7 @@ const addAttribute = (disabledItem) => {
 };
 
 const makeFormDisabled = () => {
-  forms.forEach((element) => addClass(element));
+  forms.forEach((element) => addClassFiltersDisabled(element));
   attributes.forEach((element) => addAttribute(element));
   makeSliderDisabled();
 };
@@ -35,7 +35,13 @@ const makeFormEnabled = () => {
   makeSliderEnabled();
 };
 
-export {makeFormEnabled,
+const onLoadMap = () => {
+  makeFormEnabled();
+};
+
+export {onLoadMap,
   makeFormDisabled,
-  adFormElement
+  adFormElement,
+  mapFiltersElement,
+  addClassFiltersDisabled
 };

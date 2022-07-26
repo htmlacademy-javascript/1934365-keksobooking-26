@@ -10,6 +10,15 @@ noUiSlider.create(sliderElement, {
   start: 1000,
   step: 100,
   connect: 'lower',
+  format: {
+    to: (value) => {
+      if (!Number.isInteger(value)) {
+        return value.toFixed(0);
+      }
+      return value.toFixed(0);
+    },
+    from: (value) => parseFloat(value),
+  },
 });
 
 sliderElement.noUiSlider.on('update', () => {
@@ -22,28 +31,28 @@ const setSliderValue = () =>{
       bungalow: {
         range: {
           min: 0,
-          max: 3000,
+          max: 10000,
         },
         step: 200,
       },
       flat: {
         range: {
           min: 1000,
-          max: 10000
+          max: 100000
         },
         step: 1000,
       },
       hotel: {
         range: {
           min: 3000,
-          max: 20000
+          max: 100000
         },
         step: 1000,
       },
       house: {
         range: {
           min: 5000,
-          max: 50000
+          max: 100000
         },
         step: 2000,
       },
@@ -60,7 +69,16 @@ const setSliderValue = () =>{
   });
 };
 
-setSliderValue();
+const updateSliderOptions = (min) => {
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: Number(min),
+      max: 100000,
+    },
+    step: 1
+  });
+  sliderElement.noUiSlider.set(min);
+};
 
 const makeSliderDisabled = () =>{
   sliderElement.setAttribute('disabled', true);
@@ -69,7 +87,10 @@ const makeSliderDisabled = () =>{
 const makeSliderEnabled = () => {
   sliderElement.removeAttribute('disabled');
 };
+
 export {
   makeSliderDisabled,
   makeSliderEnabled,
-  setSliderValue};
+  setSliderValue,
+  updateSliderOptions
+};
