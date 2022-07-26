@@ -87,6 +87,7 @@ const makeSliderDisabled = () =>{
 const makeSliderEnabled = () => {
   sliderElement.removeAttribute('disabled');
 };
+
 export {
   makeSliderDisabled,
   makeSliderEnabled,
