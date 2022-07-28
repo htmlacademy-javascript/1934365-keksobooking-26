@@ -70,7 +70,7 @@ const getRoomErrorMessage = () => {
 
 const onHousingTypeElementChange = () => {
   pricePerNightInputElement.min = MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value];
-  pricePerNightInputElement.placeholder = `от ${MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value]}`;
+  pricePerNightInputElement.placeholder = MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value];
   updateSliderOptions(MIN_PRICE_OF_HOUSE[typeOfHouseOptionElement.value]);
   pristine.validate(typeOfHouseOptionElement);
 };

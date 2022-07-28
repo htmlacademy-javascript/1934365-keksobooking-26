@@ -53,7 +53,7 @@ const setElementValue = (data, element, attribute) => {
   }
 };
 
-const similarAdds = (incomingData) => {
+const createSimilarAdds = (incomingData) => {
   // Клонируем блок шаблона
   const cardElement = cardTemplate.cloneNode(true);
   // находим в шаблоне элемент с классом popup__title и записываем в его содержимое данные из массива
@@ -88,5 +88,5 @@ const similarAdds = (incomingData) => {
   return cardElement;
 };
 
-export {similarAdds};
+export {createSimilarAdds};
 

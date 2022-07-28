@@ -1,6 +1,7 @@
+const ESCAPE_KEY = 'Escape';
 let message;
 
-const isPressedEscapeKey = (evt) => evt.key === 'Escape';
+const isPressedEscapeKey = (evt) => evt.key === ESCAPE_KEY;
 
 const onDocumentEscKeydown = (evt) => {
   if (isPressedEscapeKey(evt)) {
