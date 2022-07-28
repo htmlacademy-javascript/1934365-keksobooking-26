@@ -1,4 +1,4 @@
-import { similarAdds } from './cards.js';
+import { createSimilarAdds } from './cards.js';
 import { setSliderValue } from './slider.js';
 import { onHousingTypeElementChange } from './validate-form.js';
 import { adFormElement, mapFiltersElement } from './form.js';
@@ -11,7 +11,7 @@ const START_COORDINATE = {
   lat: 35.68948,
   lng: 139.69170,
 };
-
+const COUNT_AFTER_COMMA = 5;
 const ZOOM_MAP = 13;
 
 const addressElement = document.querySelector('#address');
@@ -41,7 +41,7 @@ const mainPinMarker = L.marker(START_COORDINATE,
   });
 
 const getAddressDefault = () => {
-  addressElement.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
+  addressElement.value = `${START_COORDINATE.lat.toFixed(COUNT_AFTER_COMMA)}, ${START_COORDINATE.lng.toFixed(COUNT_AFTER_COMMA)}`;
 };
 
 // Создание слоя с группой меток
@@ -51,7 +51,7 @@ const createSecondaryMarkers = (point) => {
       icon: secondaryIcon,
     },
   );
-  marker.addTo(markerGroup).bindPopup(similarAdds(point));
+  marker.addTo(markerGroup).bindPopup(createSimilarAdds(point));
   return marker;
 };
 
@@ -84,10 +84,12 @@ const activateMap = (onLoad) => {
 
   fetchOffers(onFetchOffersSuccessLoad) ;
 
+  getAddressDefault();
+
   // Получение координат при перемещении метки и запись их в поле адрес
   mainPinMarker.on('moveend', (evt) => {
     const coordinates = evt.target.getLatLng();
-    addressElement.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
+    addressElement.value = `${coordinates.lat.toFixed(COUNT_AFTER_COMMA)}, ${coordinates.lng.toFixed(COUNT_AFTER_COMMA)}`;
   });
 };
 
